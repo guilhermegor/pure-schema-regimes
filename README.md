@@ -20,11 +20,21 @@
 
 Per-regime schema adapters for series that change columns mid-series (zero-dependency)
 
-<!-- optional section: delete it when the project has no feature list -->
+A published series can change its column set mid-series under one unchanged filename. CVM's
+monthly fund profile is keyed by `CNPJ_FUNDO` through period `202311` and by
+`CNPJ_FUNDO_CLASSE` from `202312` on, with the other columns unchanged. Deriving one contract
+from the other is right about almost every column and silently wrong about the one that
+matters. This package gives each regime its own window and refuses a period that belongs to
+another regime. It does no I/O: your readers stay yours.
+
 <!-- slug: features -->
 ## Features
 
-- The capabilities users care about, one line each.
+- `RegimeWindow`: the `YYYYMM` periods one regime covers, with open bounds.
+- `RegimeRegistry`: resolves a period to the one regime that owns it, and rejects overlaps.
+- `RegimeBoundAdapter`: binds a reader to one regime and refuses another regime's period.
+- `SpecGapRegistry`: suppresses named, expected spec gaps while still reporting new ones.
+- Zero runtime dependencies: standard library only.
 
 <!-- slug: documentation -->
 ## Documentation
@@ -66,8 +76,21 @@ venv's `poe` on its own. Behind a TLS-inspecting proxy with `bin/corporate_ca.pe
 <!-- slug: usage -->
 ### Usage
 
-Run the project through its entry points under `src/`; replace this paragraph with the
-commands your users run first.
+```python
+from pure_schema_regimes import RegimeRegistry, RegimeWindow
+
+cls_registry = RegimeRegistry(
+    [
+        RegimeWindow("cnpj_keyed", int_period_start=None, int_period_end=202311),
+        RegimeWindow("cnpj_classe_keyed", int_period_start=202312, int_period_end=None),
+    ]
+)
+
+cls_registry.resolve(202312).str_name  # "cnpj_classe_keyed"
+```
+
+More recipes, including `RegimeBoundAdapter` and `SpecGapRegistry`, are in the
+[examples](https://guilhermegor.github.io/pure-schema-regimes/examples/).
 
 <!-- slug: project-structure -->
 ## Project Structure
@@ -115,8 +138,8 @@ community knows best; `bin/poe_exec.sh` covers the cases where it is not enough:
 <!-- slug: public-api -->
 ## Public API
 
-The public surface is whatever the package `__init__.py` lists in `__all__`; everything
-under `_internal/` is private.
+`RegimeWindow`, `RegimeRegistry`, `RegimeBoundAdapter` and `SpecGapRegistry`, imported from
+`pure_schema_regimes`. That is the whole `__all__`; everything under `_internal/` is private.
 
 <!-- slug: publishing -->
 ## Publishing

@@ -33,7 +33,10 @@ directory and the `pyproject.toml` placeholders via `envsubst`.
 ```
 src/<project_name>/
     __init__.py            # the public API surface (control it with __all__)
-    main.py                # library core / entry point — rename or split as it grows
+    regime_window.py       # RegimeWindow — one regime's period coverage
+    regime_registry.py     # RegimeRegistry — period → owning regime
+    regime_adapter.py      # RegimeBoundAdapter — refuses a period from another regime
+    spec_gap_registry.py   # SpecGapRegistry — named expected (regime, column) gaps
     _internal/             # PRIVATE — ships in the wheel, but not a public API
         utils/             # vendored helpers (dtypes, tabular_reader, retry/, http_downloader,
                            #   text, zip_extractor, br_identifiers, typing/)
@@ -154,12 +157,14 @@ summary: run `poe enable_pages` once afterwards.
 ## Extending this template
 
 - Keep `src/<project_name>/` as the importable package root; grow the public API there.
-- Add sub-packages as the project grows — do not dump everything into `main.py`.
+- Add sub-packages as the project grows — keep one public class per module.
 - Mirror the test folder hierarchy to match the package structure.
 - Drop `_internal/config/contracts` (and the pandas deps) if the library never reads
   tabular inputs.
 
-## Placeholder files (remove before 1.0.0)
+## Zero-dependency mode
 
-The example boilerplate is `main()` in `main.py`, its test in `tests/unit/test_main.py` and the `main` re-export in the package
-`__init__.py`. Delete or replace them, and every doc or example that still shows the greeting.
+This package was scaffolded with `zero_dependency=y`: there is no vendored pandas toolkit, and
+`_internal/utils/typing` is the stdlib-only `type_checker` plus a stdlib `TypeChecker`
+metaclass that applies it to every public method, so `bin/check_typing.py` holds here as in
+the other tiers. Keep `[tool.poetry.dependencies]` limited to `python`.
