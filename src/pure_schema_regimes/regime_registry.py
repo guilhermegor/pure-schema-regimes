@@ -7,7 +7,7 @@ lookup across every known regime.
 
 from __future__ import annotations
 
-from pure_schema_regimes._internal.utils.typing import type_checker
+from pure_schema_regimes._internal.utils.typing import TypeChecker, type_checker
 from pure_schema_regimes.regime_window import RegimeWindow
 
 
@@ -70,7 +70,7 @@ def _windows_overlap(cls_earlier: RegimeWindow, *, cls_later: RegimeWindow) -> b
     )
 
 
-class RegimeRegistry:
+class RegimeRegistry(metaclass=TypeChecker):
     """Look up which regime window covers a period, or the newest period a closed one covers.
 
     Parameters

@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from pure_schema_regimes._internal.utils.typing import type_checker
+from pure_schema_regimes._internal.utils.typing import TypeChecker, type_checker
 
 
 _INT_MIN_PERIOD = 190001
@@ -51,7 +51,7 @@ def _validate_period(int_period: int | None, *, str_field: str) -> None:
 
 
 @dataclass(frozen=True)
-class RegimeWindow:
+class RegimeWindow(metaclass=TypeChecker):
     """The period range one schema regime covers.
 
     Parameters

@@ -17,11 +17,12 @@ logic.
 
 from __future__ import annotations
 
+from pure_schema_regimes._internal.utils.typing import TypeChecker
 from pure_schema_regimes.regime_registry import RegimeRegistry
 from pure_schema_regimes.regime_window import RegimeWindow
 
 
-class RegimeBoundAdapter:
+class RegimeBoundAdapter(metaclass=TypeChecker):
     """One adapter instance bound to exactly one regime.
 
     Construct it with the regime's name; it refuses any period the registry resolves to a

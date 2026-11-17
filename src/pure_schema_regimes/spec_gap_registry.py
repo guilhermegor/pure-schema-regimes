@@ -15,10 +15,10 @@ words: registering one known gap changes nothing about how any other column is c
 
 from __future__ import annotations
 
-from pure_schema_regimes._internal.utils.typing import type_checker
+from pure_schema_regimes._internal.utils.typing import TypeChecker, type_checker
 
 
-class SpecGapRegistry:
+class SpecGapRegistry(metaclass=TypeChecker):
     """Look up whether a ``(regime, column)`` pair is a known, expected spec gap.
 
     Parameters
