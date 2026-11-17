@@ -26,6 +26,9 @@ _INT_LAST_MONTH = 12
 def _validate_period(int_period: int | None, *, str_field: str) -> None:
     """Reject a bound that is not a ``YYYYMM`` period, allowing ``None`` for an open bound.
 
+    The type is checked here because ``type_checker`` skips the ``int | None`` union, so a
+    float such as ``202311.5`` would otherwise pass on its in-range month part.
+
     Parameters
     ----------
     int_period : int or None
@@ -43,7 +46,8 @@ def _validate_period(int_period: int | None, *, str_field: str) -> None:
         If the value is not a six-digit ``YYYYMM`` with a month in ``01``-``12``.
     """
     bool_valid = int_period is None or (
-        _INT_MIN_PERIOD <= int_period <= _INT_MAX_PERIOD
+        isinstance(int_period, int)
+        and _INT_MIN_PERIOD <= int_period <= _INT_MAX_PERIOD
         and _INT_FIRST_MONTH <= int_period % 100 <= _INT_LAST_MONTH
     )
     if not bool_valid:

@@ -114,6 +114,19 @@ def test_regime_window_rejects_a_backwards_range() -> None:
         RegimeWindow(str_name="bad", int_period_start=202412, int_period_end=202401)
 
 
+def test_regime_window_rejects_a_fractional_bound() -> None:
+    """A non-integer bound is refused even when its month part is in range.
+
+    ``type_checker`` skips the ``int | None`` union, so the validator must check the type.
+
+    Returns
+    -------
+    None
+    """
+    with pytest.raises(ValueError, match="YYYYMM"):
+        RegimeWindow(str_name="bad", int_period_start=None, int_period_end=202311.5)  # type: ignore[arg-type]
+
+
 def test_adapter_bound_to_the_right_regime_accepts_its_own_period(
     cls_registry: RegimeRegistry,
 ) -> None:
