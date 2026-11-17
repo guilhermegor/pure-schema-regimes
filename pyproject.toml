@@ -1,11 +1,12 @@
 [tool.poetry]
 name = "pure-schema-regimes"
-version = "0.0.1"
+version = "0.0.0"  # set from the git tag, see docs/contributing.md#releasing
 description = "Per-regime schema adapters for series that change columns mid-series (zero-dependency)"
 authors = ["guilhermegor"]
 readme = "README.md"
 license = "MIT"
-homepage = "https://example.com/pure-schema-regimes"
+homepage = "https://guilhermegor.github.io/pure-schema-regimes/"
+documentation = "https://guilhermegor.github.io/pure-schema-regimes/"
 repository = "https://github.com/guilhermegor/pure-schema-regimes"
 keywords = ["pure-schema-regimes", "python", "library"]
 packages = [{ include = "pure_schema_regimes", from = "src" }]
@@ -27,6 +28,7 @@ classifiers = [
 [tool.poetry.urls]
 "Bug Reports" = "https://github.com/guilhermegor/pure-schema-regimes/issues"
 "Source" = "https://github.com/guilhermegor/pure-schema-regimes"
+"Documentation" = "https://guilhermegor.github.io/pure-schema-regimes/"
 
 [tool.poetry.dependencies]
 python = ">=3.11,<4.0"
@@ -59,6 +61,11 @@ mkdocs-material = ">=9.5.0"
 pymdown-extensions = ">=10.0"
 mike = ">=2.1.0"
 
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "pep440"
+
 [build-system]
-requires = ["poetry-core>=1.7.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.7.0", "poetry-dynamic-versioning>=1.4.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
