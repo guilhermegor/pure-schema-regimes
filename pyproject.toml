@@ -1,0 +1,64 @@
+[tool.poetry]
+name = "pure-schema-regimes"
+version = "0.0.1"
+description = "Per-regime schema adapters for series that change columns mid-series (zero-dependency)"
+authors = ["guilhermegor"]
+readme = "README.md"
+license = "MIT"
+homepage = "https://example.com/pure-schema-regimes"
+repository = "https://github.com/guilhermegor/pure-schema-regimes"
+keywords = ["pure-schema-regimes", "python", "library"]
+packages = [{ include = "pure_schema_regimes", from = "src" }]
+exclude = ["src/**/CLAUDE.md"]
+package-mode = true
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: MIT License",
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries",
+]
+
+[tool.poetry.urls]
+"Bug Reports" = "https://github.com/guilhermegor/pure-schema-regimes/issues"
+"Source" = "https://github.com/guilhermegor/pure-schema-regimes"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<4.0"
+
+[tool.poetry.group.dev.dependencies]
+poethepoet = ">=0.35"
+pre-commit = ">=4.1.0"
+pretty-errors = ">=1.2.25"
+commitizen = ">=4.4.1"
+build = ">=1.2.2"
+twine = ">=6.1.0"
+ruff = ">=0.17.5"
+codespell = ">=2.4.1"
+pydocstyle = ">=6.3.0"
+pytest = ">=8.0.0"
+pytest-cov = ">=6.0.0"
+pytest-randomly = ">=3.15.0"
+coverage = ">=7.6.0"
+genbadge = {extras = ["coverage"], version = ">=1.1.0"}
+mypy = ">=1.8.0"
+sqlfluff = ">=3.0.0"
+yamllint = ">=1.35.0"
+shfmt-py = ">=3.7.0"
+shellcheck-py = ">=0.10.0"
+deptry = ">=0.20"
+
+[tool.poetry.group.docs.dependencies]
+mkdocs = ">=1.6.0"
+mkdocs-material = ">=9.5.0"
+pymdown-extensions = ">=10.0"
+mike = ">=2.1.0"
+
+[build-system]
+requires = ["poetry-core>=1.7.0"]
+build-backend = "poetry.core.masonry.api"

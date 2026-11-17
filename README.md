@@ -1,0 +1,155 @@
+<!-- readme-archetype: library -->
+# pure-schema-regimes
+
+<p align="center"><img src="https://raw.githubusercontent.com/guilhermegor/pure-schema-regimes/main/assets/logo_lorem_ipsum.png" width="200" alt="pure-schema-regimes logo"></p>
+
+[![Project Status: Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+![Python Version](https://img.shields.io/badge/python-3.11%2B-blue.svg)
+[![PyPI](https://img.shields.io/pypi/v/pure-schema-regimes.svg)](https://pypi.org/project/pure-schema-regimes/)
+[![Downloads](https://img.shields.io/pepy/dt/pure-schema-regimes)](https://pepy.tech/projects/pure-schema-regimes)
+[![Docs](https://img.shields.io/badge/docs-latest-blue.svg)](https://guilhermegor.github.io/pure-schema-regimes/)
+[![Linting](https://img.shields.io/badge/linting-ruff_%7C_codespell-blue)](https://github.com/astral-sh/ruff)
+[![Mypy](https://img.shields.io/badge/type--checked-mypy-blue)](https://mypy-lang.org)
+![Test Coverage](https://raw.githubusercontent.com/guilhermegor/pure-schema-regimes/badges/coverage.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Open Issues](https://img.shields.io/github/issues/guilhermegor/pure-schema-regimes)
+![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-darkgreen.svg)
+
+<!-- slug: overview -->
+## Overview
+
+Per-regime schema adapters for series that change columns mid-series (zero-dependency)
+
+<!-- optional section: delete it when the project has no feature list -->
+<!-- slug: features -->
+## Features
+
+- The capabilities users care about, one line each.
+
+<!-- slug: documentation -->
+## Documentation
+
+The documentation site lives at https://guilhermegor.github.io/pure-schema-regimes/. Serve it locally with `poetry run poe docs_serve`.
+
+<!-- slug: getting-started -->
+## Getting Started
+
+Python 3.11+ is the only prerequisite; `bin/venv.sh` installs [Poetry](https://python-poetry.org/) when it is missing.
+
+<!-- slug: install -->
+### Install
+
+#### As a dependency
+
+```bash
+pip install pure-schema-regimes
+poetry add pure-schema-regimes
+```
+
+These commands work once the first release is published to PyPI.
+
+#### For development
+
+```bash
+git clone https://github.com/guilhermegor/pure-schema-regimes.git
+cd pure-schema-regimes
+bash bin/venv.sh
+poetry run poe init
+```
+
+`poe` lives inside the virtualenv, so `bin/venv.sh` creates it first; `poetry run poe init` then
+runs it without activating anything. If `poetry` is not on `PATH` (for example right after
+`bin/venv.sh` installed it with `--user`), use `bash bin/poe_exec.sh init`, which finds the
+venv's `poe` on its own. Behind a TLS-inspecting proxy with `bin/corporate_ca.pem` in place, run
+`init` through `bash bin/poe_exec.sh init` so the CA bundle is wired for the downloads.
+
+<!-- slug: usage -->
+### Usage
+
+Run the project through its entry points under `src/`; replace this paragraph with the
+commands your users run first.
+
+<!-- slug: project-structure -->
+## Project Structure
+
+```text
+pure-schema-regimes/
+├── .github/        workflows, CODEOWNERS, PR template
+├── .specs/         feature specs and backlog trackers
+├── bin/            gate scripts and helpers
+├── docs/           published documentation
+├── src/            application code
+├── tests/
+│   ├── unit/
+│   └── integration/
+├── pyproject.toml
+└── poe_tasks.toml  task runner entry points
+```
+
+<!-- slug: development -->
+## Development
+
+After the bootstrap under Install, any task can be run with
+`poetry run poe <task>`, and `poetry run poe` with no task lists them.
+
+```bash
+poetry run poe unit_tests
+poetry run poe integration_tests
+```
+
+Once the first release's docs deploy has created the `gh-pages` branch, run
+`poetry run poe enable_pages` once: until that branch exists, `init` leaves Pages untouched.
+
+### `poetry run poe` or `bash bin/poe_exec.sh`?
+
+Both run the same task through the same venv `poe`. Use `poetry run poe`, the command the
+community knows best; `bin/poe_exec.sh` covers the cases where it is not enough:
+
+| Case | `poetry run poe` | `bash bin/poe_exec.sh` |
+|---|---|---|
+| Normal machine, `poetry` on `PATH` | works | works |
+| `poetry` not on `PATH` (e.g. right after `bin/venv.sh` installed it with `--user`) | fails: `poetry: command not found` | works: finds `.venv/bin/poe` (`.venv/Scripts/poe.exe` on Windows) without `poetry` |
+| Corporate TLS-inspecting network, with `bin/corporate_ca.pem` present | gets no CA bundle; tasks that download can fail TLS | works: builds a union CA bundle and exports `REQUESTS_CA_BUNDLE`, `SSL_CERT_FILE`, `CURL_CA_BUNDLE` and `PIP_CERT` before the task runs |
+| `poe` not installed | generic Poetry error | prints the install routes (`bin/venv.sh`, `pipx`, Poetry plugin) |
+
+<!-- slug: public-api -->
+## Public API
+
+The public surface is whatever the package `__init__.py` lists in `__all__`; everything
+under `_internal/` is private.
+
+<!-- slug: publishing -->
+## Publishing
+
+Releases go out from the release workflows under `.github/workflows/`; the git tag is the
+version.
+
+The path from 0.x to 1.0.0, and the release gate that guards it, is in
+[docs/releasing-1-0-0.md](docs/releasing-1-0-0.md).
+
+<!-- slug: contributing -->
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the branch, commit and review rules.
+
+<!-- slug: license -->
+## License
+
+This project is licensed under MIT; see [LICENSE](LICENSE).
+
+<!-- slug: authors -->
+## Authors
+
+- guilhermegor — [GitHub](https://github.com/guilhermegor) | [LinkedIn](https://www.linkedin.com/in/your-linkedin-handle)
+
+<!-- slug: useful-links -->
+## Useful Links
+
+- [GitHub Repository](https://github.com/guilhermegor/pure-schema-regimes)
+- [Issue Tracker](https://github.com/guilhermegor/pure-schema-regimes/issues)
+- [Documentation](https://guilhermegor.github.io/pure-schema-regimes/)
+
+---
+
+<sub>Generated from the lib-minimal template via [BlueprintX](https://github.com/guilhermegor/blueprintx).</sub>
+<!-- add any project disclaimer inside the sub tag above; for a library wrapping a third party, e.g. "Unofficial, community library. Not affiliated with or endorsed by ORG_NAME." -->
