@@ -6,47 +6,19 @@ Public interface for this library.
 
 ---
 
-## Module: `main`
+## Public classes
 
-Entry point module. Extend this with your library's public functions.
+Import all four from the package root: `from pure_schema_regimes import RegimeWindow`.
 
-### `main() -> None`
+| Class | Role |
+|-------|------|
+| `RegimeWindow` | Frozen value object: a regime's name and the `YYYYMM` periods it covers (`None` leaves a bound open). Rejects a malformed period or a backwards range. |
+| `RegimeRegistry` | Maps a period to the one window that covers it (`resolve`), and gives a closed regime's last period (`default_period`). Rejects overlapping windows. |
+| `RegimeBoundAdapter` | Binds one adapter to one regime and refuses a period that belongs to another. Carries no I/O: a concrete reader composes or subclasses it. |
+| `SpecGapRegistry` | A named list of expected `(regime, column)` gaps between a closed regime and a spec written for the current one (`is_known_gap`, `unexplained`). |
 
-Runs the library entry point. Replace the body with your top-level logic.
-
-```python
-from <package_name>.main import main
-
-main()
-```
-
----
-
-## Removing the starter `main`
-
-`main` is a placeholder. Deleting `src/<package_name>/main.py` on its own breaks
-the project: two other code files import it. Remove these three together:
-
-| # | File | What to remove |
-|---|------|----------------|
-| 1 | `src/<package_name>/main.py` | Delete the file |
-| 2 | `tests/unit/test_main.py` | Delete the file (it imports `main`) |
-| 3 | `src/<package_name>/__init__.py` | Delete `from .main import main` and the `"main"` entry in `__all__` (`"__version__"` stays); without this, `import <package_name>` fails |
-
-Docs still show `main` afterwards, in English and in `docs/pt-BR/`. They do not
-break the build (the "Module: `main`" section is a plain code block, not a
-mkdocstrings `:::` directive), but they document a function that no longer
-exists:
-
-| # | File | What to change |
-|---|------|----------------|
-| 4 | `docs/usage.md` and `docs/pt-BR/usage.md` | Replace the "Basic usage" example (`from <package_name>.main import main`) with one of your own public functions |
-| 5 | `docs/examples.md` and `docs/pt-BR/examples.md` | Replace the first recipe, which imports `main` from the package |
-| 6 | `docs/api/reference.md` and `docs/pt-BR/api/reference.md` | In the English page delete the "Module: `main`" section and this section; in the pt-BR page delete only "Módulo: `main`" (it has no removal section). In both, delete the `---` rules between the removed sections too, leaving exactly one `---` between the preceding section and "Adding new modules" |
-| 7 | `AGENTS.md` | Update the layout tree and the "example boilerplate" note that name `main.py` |
-
-No other code file references `main`: `pyproject.toml` has no `[project.scripts]`
-entry, and neither `poe_tasks.toml` nor `.coveragerc` names it.
+See [Usage](../usage.md) and [Examples](../examples.md) for the CVM fund-profile case these
+classes were measured against.
 
 ---
 

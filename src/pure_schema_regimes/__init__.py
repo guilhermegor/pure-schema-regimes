@@ -1,8 +1,11 @@
-"""pure-schema-regimes package."""
+"""Per-regime schema adapters for series that change columns mid-series."""
 
 from importlib.metadata import PackageNotFoundError, version
 
-from .main import main
+from .regime_adapter import RegimeBoundAdapter
+from .regime_registry import RegimeRegistry
+from .regime_window import RegimeWindow
+from .spec_gap_registry import SpecGapRegistry
 
 
 try:
@@ -13,5 +16,8 @@ except PackageNotFoundError:  # pragma: no cover - source tree without an instal
 
 __all__ = [
     "__version__",
-    "main",
+    "RegimeBoundAdapter",
+    "RegimeRegistry",
+    "RegimeWindow",
+    "SpecGapRegistry",
 ]
