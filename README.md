@@ -140,7 +140,7 @@ This project is licensed under MIT; see [LICENSE](LICENSE).
 <!-- slug: authors -->
 ## Authors
 
-- guilhermegor — [GitHub](https://github.com/guilhermegor) | [LinkedIn](https://www.linkedin.com/in/your-linkedin-handle)
+- guilhermegor — [GitHub](https://github.com/guilhermegor) | [LinkedIn](https://www.linkedin.com/in/guilhermegor/)
 
 <!-- slug: useful-links -->
 ## Useful Links
