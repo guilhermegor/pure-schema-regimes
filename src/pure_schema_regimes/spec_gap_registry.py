@@ -15,6 +15,9 @@ words: registering one known gap changes nothing about how any other column is c
 
 from __future__ import annotations
 
+from collections.abc import Mapping
+from types import MappingProxyType
+
 from pure_schema_regimes._internal.utils.typing import TypeChecker, type_checker
 
 
@@ -81,11 +84,15 @@ def _require_str_columns(*, obj_regime_name: object, set_columns: frozenset[obje
     TypeError
         When any element is not a ``str``.
     """
-    list_bad = [obj_column for obj_column in set_columns if not isinstance(obj_column, str)]
+    list_bad = sorted(
+        f"{obj_column!r} ({type(obj_column).__name__})"
+        for obj_column in set_columns
+        if not isinstance(obj_column, str)
+    )
     if list_bad:
         raise TypeError(
             f"known gaps for regime {obj_regime_name!r} must contain only str, "
-            f"got {type(list_bad[0]).__name__} ({list_bad[0]!r})"
+            f"got {', '.join(list_bad)}"
         )
 
 
@@ -104,6 +111,11 @@ class SpecGapRegistry(metaclass=TypeChecker):
         When a key is not ``str``, a value is not ``frozenset``, or a value holds a
         non-``str`` element. Every entry is checked: the runtime type checker only samples
         containers.
+
+    Notes
+    -----
+    The mapping is copied into a read-only view, so mutating the caller's dict after
+    construction cannot slip an unvalidated entry past these checks.
     """
 
     def __init__(self, dict_known_gaps: dict[str, frozenset[str]]) -> None:
@@ -111,7 +123,9 @@ class SpecGapRegistry(metaclass=TypeChecker):
             _require_str_key(obj_regime_name)
             _require_frozenset_value(obj_regime_name=obj_regime_name, obj_columns=obj_columns)
             _require_str_columns(obj_regime_name=obj_regime_name, set_columns=obj_columns)
-        self.dict_known_gaps = dict_known_gaps
+        self.dict_known_gaps: Mapping[str, frozenset[str]] = MappingProxyType(
+            dict(dict_known_gaps)
+        )
 
     @type_checker
     def is_known_gap(self, *, str_regime_name: str, str_column: str) -> bool:
