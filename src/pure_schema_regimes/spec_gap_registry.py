@@ -18,6 +18,77 @@ from __future__ import annotations
 from pure_schema_regimes._internal.utils.typing import TypeChecker, type_checker
 
 
+@type_checker
+def _require_str_key(obj_regime_name: object) -> None:
+    """Raise ``TypeError`` unless the regime name is a ``str``.
+
+    Parameters
+    ----------
+    obj_regime_name : object
+        The mapping key.
+
+    Raises
+    ------
+    TypeError
+        When the key is not a ``str``.
+    """
+    if not isinstance(obj_regime_name, str):
+        raise TypeError(
+            f"regime name {obj_regime_name!r} must be str, got {type(obj_regime_name).__name__}"
+        )
+
+
+@type_checker
+def _require_frozenset_value(*, obj_regime_name: object, obj_columns: object) -> None:
+    """Raise ``TypeError`` unless the known-gap value is a ``frozenset``.
+
+    A plain ``str`` value is the defect this guards (issue #17): ``in`` on a string is a
+    substring test, so ``CNPJ`` would read as a known gap of ``"CNPJ_FUNDO"``. A mutable
+    ``set`` is refused too, so the registry cannot change after construction.
+
+    Parameters
+    ----------
+    obj_regime_name : object
+        The mapping key, named in the error.
+    obj_columns : object
+        The mapping value.
+
+    Raises
+    ------
+    TypeError
+        When the value is not a ``frozenset``.
+    """
+    if not isinstance(obj_columns, frozenset):
+        raise TypeError(
+            f"known gaps for regime {obj_regime_name!r} must be frozenset[str], "
+            f"got {type(obj_columns).__name__}"
+        )
+
+
+@type_checker
+def _require_str_columns(*, obj_regime_name: object, set_columns: frozenset[object]) -> None:
+    """Raise ``TypeError`` unless every column name in the value is a ``str``.
+
+    Parameters
+    ----------
+    obj_regime_name : object
+        The mapping key, named in the error.
+    set_columns : frozenset of object
+        The mapping value, already known to be a ``frozenset``.
+
+    Raises
+    ------
+    TypeError
+        When any element is not a ``str``.
+    """
+    list_bad = [obj_column for obj_column in set_columns if not isinstance(obj_column, str)]
+    if list_bad:
+        raise TypeError(
+            f"known gaps for regime {obj_regime_name!r} must contain only str, "
+            f"got {type(list_bad[0]).__name__} ({list_bad[0]!r})"
+        )
+
+
 class SpecGapRegistry(metaclass=TypeChecker):
     """Look up whether a ``(regime, column)`` pair is a known, expected spec gap.
 
@@ -26,9 +97,20 @@ class SpecGapRegistry(metaclass=TypeChecker):
     dict_known_gaps : dict of str to frozenset of str
         Regime name → the column names that regime is KNOWN to lack in the current spec.
         A regime absent from this dict has no known gaps (every mismatch is reported).
+
+    Raises
+    ------
+    TypeError
+        When a key is not ``str``, a value is not ``frozenset``, or a value holds a
+        non-``str`` element. Every entry is checked: the runtime type checker only samples
+        containers.
     """
 
     def __init__(self, dict_known_gaps: dict[str, frozenset[str]]) -> None:
+        for obj_regime_name, obj_columns in dict_known_gaps.items():
+            _require_str_key(obj_regime_name)
+            _require_frozenset_value(obj_regime_name=obj_regime_name, obj_columns=obj_columns)
+            _require_str_columns(obj_regime_name=obj_regime_name, set_columns=obj_columns)
         self.dict_known_gaps = dict_known_gaps
 
     @type_checker
