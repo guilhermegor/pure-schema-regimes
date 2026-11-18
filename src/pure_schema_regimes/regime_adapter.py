@@ -17,12 +17,14 @@ logic.
 
 from __future__ import annotations
 
-from pure_schema_regimes._internal.utils.typing import TypeChecker
+from abc import ABC
+
+from pure_schema_regimes._internal.utils.typing import type_checker
 from pure_schema_regimes.regime_registry import RegimeRegistry
 from pure_schema_regimes.regime_window import RegimeWindow
 
 
-class RegimeBoundAdapter(metaclass=TypeChecker):
+class RegimeBoundAdapter(ABC):  # noqa: B024 - ABC for metaclass composition, still concrete
     """One adapter instance bound to exactly one regime.
 
     Construct it with the regime's name; it refuses any period the registry resolves to a
@@ -31,6 +33,12 @@ class RegimeBoundAdapter(metaclass=TypeChecker):
     versa. A ``None`` period resolves through :meth:`RegimeRegistry.default_period`, so a
     CLOSED regime's no-args default is its own newest covered period, never wall-clock
     "today".
+
+    A plain ``ABC`` rather than ``metaclass=TypeChecker``: a consumer subclass routinely
+    passes its own project ``TypeChecker`` metaclass, and two unrelated metaclasses raise
+    ``TypeError: metaclass conflict`` at class creation (#16). Any consumer metaclass derived
+    from ``ABCMeta`` composes with this base; the constructor keeps its runtime type check
+    through ``@type_checker`` instead.
 
     Parameters
     ----------
@@ -43,6 +51,7 @@ class RegimeBoundAdapter(metaclass=TypeChecker):
         :meth:`RegimeRegistry.default_period`.
     """
 
+    @type_checker
     def __init__(  # complexity-ok: default + refuse-wrong-regime IS the constructor contract
         self,
         *,
