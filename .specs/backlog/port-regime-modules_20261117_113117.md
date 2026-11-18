@@ -16,6 +16,14 @@ Branch: `feat/8-port-regime-modules`.
 
 ## Open
 
-- [ ] Publish `0.1.0` to Test PyPI, verify the install, then publish to PyPI (needs the pending
-      trusted publishers registered on both indexes).
-- [ ] Report the zero-dependency `check_typing` gap upstream in blueprintx.
+- [x] Publish `0.1.0` to Test PyPI, verify the install, then publish to PyPI (needs the pending
+      trusted publishers registered on both indexes). Released as
+      https://github.com/guilhermegor/pure-schema-regimes/releases/tag/v0.1.0.
+- [x] Report the zero-dependency `check_typing` gap upstream in blueprintx
+      (guilhermegor/blueprintx#1204).
+
+## Completed — kept as a record
+
+Both open items are done: `0.1.0` is published and install-verified from a clean venv on
+Test PyPI and PyPI, and the `check_typing` gap is filed upstream as
+guilhermegor/blueprintx#1204.
