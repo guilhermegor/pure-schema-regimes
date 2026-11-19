@@ -46,7 +46,8 @@ contractual. Please allow a reasonable window before any public disclosure.
 ## Supported versions
 
 Security fixes land on the latest **1.x** release only. Within 1.x the public API is stable
-(full semver), so upgrading to the latest 1.x release to pick up a fix never breaks a caller.
+(full semver), so upgrading to the latest 1.x release to pick up a fix never breaks a caller
+that uses the documented API.
 
 | Version | Supported |
 |---------|-----------|

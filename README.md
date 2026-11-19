@@ -143,7 +143,8 @@ community knows best; `bin/poe_exec.sh` covers the cases where it is not enough:
 **1.x API guarantee.** From 1.0.0 on, this package follows [semantic versioning](https://semver.org/).
 Every name in `__all__`, and the documented signatures and behaviour of its classes, stay
 backward compatible across all 1.x releases: a 1.x upgrade never removes or renames a public
-name or keyword argument, and never narrows what a call accepts. A breaking change ships only
+name or keyword argument, and never narrows what a call is documented to accept. A breaking
+change ships only
 in 2.0.0. As in semver, a bug fix is not a breaking change: when the code contradicts its
 documented contract (for example, it accepts input the docs say it refuses), a 1.x PATCH
 release corrects the code to match the docs. Anything under `_internal/` carries no guarantee
