@@ -45,13 +45,14 @@ contractual. Please allow a reasonable window before any public disclosure.
 
 ## Supported versions
 
-Unless stated otherwise below, security fixes land on the **latest released version** only.
-Consumers pinned to an older line should upgrade to pick up a fix.
+Security fixes land on the latest **1.x** release only. Within 1.x the public API is stable
+(full semver), so upgrading to the latest 1.x release to pick up a fix never breaks a caller.
 
 | Version | Supported |
 |---------|-----------|
-| latest  | ✅        |
-| older   | ❌        |
+| 1.x (latest release) | ✅ |
+| 1.x (older releases) | ❌ upgrade to the latest 1.x |
+| 0.x     | ❌        |
 
 ## Scope
 
