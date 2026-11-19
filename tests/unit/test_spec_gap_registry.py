@@ -4,6 +4,10 @@ A plain ``str`` value used to be stored as-is, and ``in`` on a string is a subst
 ``CNPJ`` read as a known gap of ``"CNPJ_FUNDO"``. The constructor now checks every entry.
 """
 
+from collections.abc import Callable
+import copy
+import pickle  # noqa: S403 - round-trips an object this test builds itself
+
 import pytest
 
 from pure_schema_regimes.spec_gap_registry import SpecGapRegistry
@@ -37,7 +41,7 @@ def test_spec_gap_registry_bad_entry_raises_type_error(
     None
     """
     with pytest.raises(TypeError, match=str_match):
-        SpecGapRegistry(dict_known_gaps)
+        SpecGapRegistry(dict_known_gaps)  # type: ignore[arg-type]
 
 
 def test_spec_gap_registry_mutating_source_dict_after_init_changes_nothing() -> None:
@@ -48,7 +52,7 @@ def test_spec_gap_registry_mutating_source_dict_after_init_changes_nothing() -> 
     None
     """
     dict_known_gaps: dict[str, object] = {"old": frozenset({"OTHER"})}
-    cls_registry = SpecGapRegistry(dict_known_gaps)
+    cls_registry = SpecGapRegistry(dict_known_gaps)  # type: ignore[arg-type]
     dict_known_gaps["old"] = "CNPJ_FUNDO"
     assert cls_registry.is_known_gap(str_regime_name="old", str_column="CNPJ") is False
 
@@ -74,7 +78,7 @@ def test_spec_gap_registry_bad_value_after_good_one_names_the_key() -> None:
     """
     dict_known_gaps = {"good": frozenset({"A"}), "planted_bad_regime": "CNPJ_FUNDO"}
     with pytest.raises(TypeError, match="planted_bad_regime"):
-        SpecGapRegistry(dict_known_gaps)
+        SpecGapRegistry(dict_known_gaps)  # type: ignore[arg-type]
 
 
 @pytest.mark.parametrize(
@@ -99,6 +103,41 @@ def test_spec_gap_registry_frozenset_matches_whole_column_names_only(
     """
     cls_registry = SpecGapRegistry({"old": frozenset({"CNPJ_FUNDO"})})
     assert cls_registry.is_known_gap(str_regime_name="old", str_column=str_column) is bool_expected
+
+
+@pytest.mark.parametrize(
+    "fn_round_trip",
+    [lambda obj: pickle.loads(pickle.dumps(obj)), copy.deepcopy],  # noqa: S301
+    ids=["pickle", "deepcopy"],
+)
+def test_spec_gap_registry_round_trip_keeps_known_gaps(
+    fn_round_trip: Callable[[SpecGapRegistry], SpecGapRegistry],
+) -> None:
+    """A registry survives pickle and deepcopy with its gaps intact.
+
+    Parameters
+    ----------
+    fn_round_trip : Callable[[SpecGapRegistry], SpecGapRegistry]
+        Serialises and restores, or deep-copies, the registry.
+
+    Returns
+    -------
+    None
+    """
+    cls_registry = fn_round_trip(SpecGapRegistry({"old": frozenset({"CNPJ_FUNDO"})}))
+    assert dict(cls_registry.dict_known_gaps) == {"old": frozenset({"CNPJ_FUNDO"})}
+
+
+def test_spec_gap_registry_known_gaps_cannot_be_rebound() -> None:
+    """The public attribute is a read-only property, so rebinding it cannot skip validation.
+
+    Returns
+    -------
+    None
+    """
+    cls_registry = SpecGapRegistry({"old": frozenset({"A"})})
+    with pytest.raises(AttributeError):
+        cls_registry.dict_known_gaps = {"old": "CNPJ_FUNDO"}  # type: ignore[misc, dict-item]
 
 
 def test_spec_gap_registry_empty_frozenset_value_has_no_known_gaps() -> None:

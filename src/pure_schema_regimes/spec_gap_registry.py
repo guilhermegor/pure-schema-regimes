@@ -109,23 +109,34 @@ class SpecGapRegistry(metaclass=TypeChecker):
     ------
     TypeError
         When a key is not ``str``, a value is not ``frozenset``, or a value holds a
-        non-``str`` element. Every entry is checked: the runtime type checker only samples
-        containers.
+        non-``str`` element. Every entry is checked here because ``TypeChecker`` skips
+        dunder methods, so nothing else validates the constructor's argument.
 
     Notes
     -----
-    The mapping is copied into a read-only view, so mutating the caller's dict after
-    construction cannot slip an unvalidated entry past these checks.
+    The constructor copies the mapping first and validates the copy, so a later write to
+    the caller's dict cannot reach the registry. Storage is a private ``dict``, which keeps
+    the registry picklable; the public ``dict_known_gaps`` is a read-only property.
     """
 
     def __init__(self, dict_known_gaps: dict[str, frozenset[str]]) -> None:
-        for obj_regime_name, obj_columns in dict_known_gaps.items():
+        dict_copy = dict(dict_known_gaps)
+        for obj_regime_name, obj_columns in dict_copy.items():
             _require_str_key(obj_regime_name)
             _require_frozenset_value(obj_regime_name=obj_regime_name, obj_columns=obj_columns)
             _require_str_columns(obj_regime_name=obj_regime_name, set_columns=obj_columns)
-        self.dict_known_gaps: Mapping[str, frozenset[str]] = MappingProxyType(
-            dict(dict_known_gaps)
-        )
+        self._dict_known_gaps = dict_copy
+
+    @property
+    def dict_known_gaps(self) -> Mapping[str, frozenset[str]]:
+        """Read-only view of the validated known gaps.
+
+        Returns
+        -------
+        Mapping[str, frozenset[str]]
+            A live, write-refusing view over the private copy built at construction.
+        """
+        return MappingProxyType(self._dict_known_gaps)
 
     @type_checker
     def is_known_gap(self, *, str_regime_name: str, str_column: str) -> bool:

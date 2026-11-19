@@ -10,6 +10,19 @@ Branch: `fix/17-spec-gap-registry-validation`. PR: #19.
 - [x] Added `tests/unit/test_spec_gap_registry.py`. Should-fail cases: `str`, `set` and `list`
       values, a non-`str` element, a non-`str` key, and a bad entry after a good one. Should-pass
       case: whole-name matching, where `CNPJ` must not match `CNPJ_FUNDO`.
+- [x] Copied the mapping first and validated the copy, then stored it in a private
+      `_dict_known_gaps`. `dict_known_gaps` is a read-only property that returns a
+      `MappingProxyType` view, so the attribute cannot be rebound and the registry still
+      pickles.
+- [x] Added tests:
+      - a write to the source dict after construction does not reach the registry;
+      - the view refuses item assignment;
+      - the property refuses rebinding;
+      - pickle and deepcopy round-trip;
+      - an empty `frozenset` is valid.
+- [x] Made the `match=` assertions name messages only this module raises. They held in 30
+      runs with varied hash seeds: `TypeChecker` skips dunders, so `__init__` is checked only
+      by this module.
 
 ## Open
 
