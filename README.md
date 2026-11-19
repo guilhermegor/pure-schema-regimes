@@ -56,8 +56,6 @@ pip install pure-schema-regimes
 poetry add pure-schema-regimes
 ```
 
-These commands work once the first release is published to PyPI.
-
 #### For development
 
 ```bash
@@ -139,7 +137,14 @@ community knows best; `bin/poe_exec.sh` covers the cases where it is not enough:
 ## Public API
 
 `RegimeWindow`, `RegimeRegistry`, `RegimeBoundAdapter` and `SpecGapRegistry`, imported from
-`pure_schema_regimes`. That is the whole `__all__`; everything under `_internal/` is private.
+`pure_schema_regimes`, plus `__version__`. That is the whole `__all__`; everything under
+`_internal/` is private.
+
+**1.x API guarantee.** From 1.0.0 on, this package follows [semantic versioning](https://semver.org/).
+Every name in `__all__`, and the documented signatures and behaviour of its classes, stay
+backward compatible across all 1.x releases: a 1.x upgrade never removes or renames a public
+name or keyword argument, and never narrows what a call accepts. A breaking change ships only
+in 2.0.0. Anything under `_internal/` carries no guarantee and can change in any release.
 
 <!-- slug: publishing -->
 ## Publishing

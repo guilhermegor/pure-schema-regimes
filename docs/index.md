@@ -1,6 +1,7 @@
 # **pure-schema-regimes** <img src="assets/logo.png" align="right" width="200" style="border-radius: 15px;" alt="pure-schema-regimes">
 
-A minimal Python library with packaging, tests, CI, and linting pre-configured.
+Per-regime schema adapters for series that change columns mid-series. Standard library only,
+no I/O: your readers stay yours.
 
 ---
 

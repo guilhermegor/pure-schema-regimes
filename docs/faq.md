@@ -10,10 +10,10 @@ entries as they come up in issues.
 ## How do I install it?
 
 ```bash
-pip install <project_name>
+pip install pure-schema-regimes
 ```
 
-Replace with the real distribution name and any extras (e.g. `pip install "<project_name>[web]"`).
+The package has no runtime dependencies, so there are no extras.
 
 ## How do I add or update a dependency?
 
