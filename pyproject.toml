@@ -10,7 +10,7 @@ documentation = "https://guilhermegor.github.io/pure-schema-regimes/"
 repository = "https://github.com/guilhermegor/pure-schema-regimes"
 keywords = ["pure-schema-regimes", "python", "library"]
 packages = [{ include = "pure_schema_regimes", from = "src" }]
-exclude = ["src/**/CLAUDE.md"]
+exclude = ["src/**/CLAUDE.md", "src/**/AGENTS.md"]
 package-mode = true
 classifiers = [
     "Programming Language :: Python :: 3",
