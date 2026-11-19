@@ -134,8 +134,9 @@ class SpecGapRegistry(metaclass=TypeChecker):
     ------
     TypeError
         When the argument is not a ``Mapping``, a key is not ``str``, a value is not
-        ``frozenset``, or a value holds a non-``str`` element. Every entry is checked here because ``TypeChecker`` skips
-        dunder methods, so nothing else validates the constructor's argument.
+        ``frozenset``, or a value holds a non-``str`` element. Every entry is checked here
+        because ``TypeChecker`` skips dunder methods, so nothing else validates the
+        constructor's argument.
 
     Notes
     -----
