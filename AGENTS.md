@@ -31,25 +31,24 @@ directory and the `pyproject.toml` placeholders via `envsubst`.
 ## Layout
 
 ```
-src/<project_name>/
+src/pure_schema_regimes/
     __init__.py            # the public API surface (control it with __all__)
+    py.typed               # PEP 561 marker: the wheel ships its type hints
     regime_window.py       # RegimeWindow — one regime's period coverage
     regime_registry.py     # RegimeRegistry — period → owning regime
     regime_adapter.py      # RegimeBoundAdapter — refuses a period from another regime
     spec_gap_registry.py   # SpecGapRegistry — named expected (regime, column) gaps
     _internal/             # PRIVATE — ships in the wheel, but not a public API
-        utils/             # vendored helpers (dtypes, tabular_reader, retry/, http_downloader,
-                           #   text, zip_extractor, br_identifiers, typing/)
-        config/            # ALL private structural declarations (one config/CLAUDE.md maps them)
-            contracts/     # FileContract declarations (one per input source)
-            ports/         # private behavioural ABCs (hexagonal ports; ABCTypeCheckerMeta) — opt-in
-            # schemas/     # (opt-in) Pydantic models mirroring an external standard, or the
-                           #   library's own product — the ONLY home of pydantic models
-                           #   (check-layer-imports allows pydantic only in config and utils);
-                           #   never re-exported: check-all-exports bans `_internal` names in __all__
+        utils/
+            typing/        # stdlib type_checker + TypeChecker metaclass (zero-dependency mode)
 tests/
-    unit/  integration/  performance/
+    unit/  integration/
 ```
+
+The template's other `_internal` seams (`dtypes`, `tabular_reader`, `retry/`,
+`http_downloader`, `config/contracts`, `config/ports`, `config/schemas`) are not shipped here:
+zero-dependency mode leaves them out, and the 1.0.0 cut found nothing unreachable to remove.
+The guidance below still applies if one is added.
 
 **Public vs private.** Consumers import `<project_name>` (your core). Everything under
 `<project_name>._internal` is vendored support code: it ships inside the wheel (so imports
