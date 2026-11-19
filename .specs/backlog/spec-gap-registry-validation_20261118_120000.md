@@ -24,6 +24,10 @@ Branch: `fix/17-spec-gap-registry-validation`. PR: #19.
       runs with varied hash seeds: `TypeChecker` skips dunders, so `__init__` is checked only
       by this module.
 
+- [x] Refused a non-`Mapping` argument with this module's own `TypeError`. Before, a list of
+      pairs built a registry, and a string or `None` raised the wrong error. `is_known_gap` now
+      reads the private dict.
+
 ## Open
 
 - [ ] Merge PR #19 after CodeRabbit review and green required checks.
