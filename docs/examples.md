@@ -34,8 +34,11 @@ from pure_schema_regimes import RegimeBoundAdapter
 cls_adapter = RegimeBoundAdapter(cls_registry=cls_registry, str_regime_name="cnpj_keyed")
 cls_adapter.int_period  # 202311
 
-RegimeBoundAdapter(cls_registry=cls_registry, str_regime_name="cnpj_keyed", int_period=202401)
-# ValueError: Period 202401 belongs to regime 'cnpj_classe_keyed', not 'cnpj_keyed'.
+try:
+    RegimeBoundAdapter(cls_registry=cls_registry, str_regime_name="cnpj_keyed", int_period=202401)
+except ValueError as exc:
+    str_error = str(exc)
+# str_error: "Period 202401 belongs to regime 'cnpj_classe_keyed', not 'cnpj_keyed'."
 ```
 
 ## Recipe: suppress known spec gaps, and only those
