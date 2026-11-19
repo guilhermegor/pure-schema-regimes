@@ -32,13 +32,14 @@ from pure_schema_regimes import RegimeBoundAdapter
 
 # No period given: a closed regime defaults to its own last period, not to "today".
 cls_adapter = RegimeBoundAdapter(cls_registry=cls_registry, str_regime_name="cnpj_keyed")
-cls_adapter.int_period  # 202311
+assert cls_adapter.int_period == 202311
 
 try:
     RegimeBoundAdapter(cls_registry=cls_registry, str_regime_name="cnpj_keyed", int_period=202401)
 except ValueError as exc:
-    str_error = str(exc)
-# str_error: "Period 202401 belongs to regime 'cnpj_classe_keyed', not 'cnpj_keyed'."
+    assert "belongs to regime 'cnpj_classe_keyed', not 'cnpj_keyed'" in str(exc)
+else:
+    raise AssertionError("a period from another regime must be refused")
 ```
 
 ## Recipe: suppress known spec gaps, and only those

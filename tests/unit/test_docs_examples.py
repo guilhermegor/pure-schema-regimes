@@ -7,7 +7,7 @@ import pytest
 
 
 _PATH_ROOT = Path(__file__).parents[2]
-_RE_PYTHON_BLOCK = re.compile(r"```python\n(.*?)```", re.DOTALL)
+_RE_PYTHON_BLOCK = re.compile(r"```python[^\n]*\r?\n(.*?)```", re.DOTALL)
 
 
 def _read_python_blocks(path_doc: Path) -> str:
@@ -26,9 +26,27 @@ def _read_python_blocks(path_doc: Path) -> str:
     return "\n".join(_RE_PYTHON_BLOCK.findall(path_doc.read_text(encoding="utf-8")))
 
 
-@pytest.mark.parametrize(
-    "str_doc", ["README.md", "docs/usage.md", "docs/examples.md"], ids=lambda str_doc: str_doc
-)
+_LIST_DOCS = ["README.md", "docs/usage.md", "docs/examples.md"]
+
+
+@pytest.mark.parametrize("str_doc", _LIST_DOCS, ids=lambda str_doc: str_doc)
+def test_docs_examples_doc_has_python_blocks(str_doc: str) -> None:
+    """Each document yields at least one block, so a renamed fence cannot empty the check.
+
+    Parameters
+    ----------
+    str_doc : str
+        Path of the document, relative to the project root.
+
+    Returns
+    -------
+    None
+    """
+    str_text = (_PATH_ROOT / str_doc).read_text(encoding="utf-8")
+    assert _RE_PYTHON_BLOCK.findall(str_text) != []
+
+
+@pytest.mark.parametrize("str_doc", _LIST_DOCS, ids=lambda str_doc: str_doc)
 def test_docs_examples_python_blocks_run(str_doc: str) -> None:
     """Every documented example runs top to bottom and builds the shared registry.
 
