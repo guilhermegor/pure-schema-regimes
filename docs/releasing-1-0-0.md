@@ -1,7 +1,11 @@
 # Releasing 1.0.0
 
-1.0.0 is the moment this library promises its public API. Until then the 0.x rules apply: a
-breaking change is a MINOR bump, a feature or fix is a PATCH. From 1.0.0 on, full semver
+> **Status:** 1.0.0 shipped on 2026-11-19. Full semver now applies to every release: a breaking
+> change is a MAJOR bump, a feature is a MINOR, a fix is a PATCH. The rest of this page records
+> how the cut was made.
+
+1.0.0 is the moment this library promises its public API. Until then the 0.x rules applied: a
+breaking change was a MINOR bump, a feature or fix a PATCH. From 1.0.0 on, full semver
 applies. Two things must be true at that moment and are easy to get wrong by hand: the
 backlog is done, and the docs describe the code that actually ships.
 
