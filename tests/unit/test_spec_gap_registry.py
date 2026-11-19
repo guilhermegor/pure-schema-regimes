@@ -7,6 +7,7 @@ A plain ``str`` value used to be stored as-is, and ``in`` on a string is a subst
 from collections.abc import Callable
 import copy
 import pickle  # noqa: S403 - round-trips an object this test builds itself
+from types import MappingProxyType
 
 import pytest
 
@@ -55,6 +56,30 @@ def test_spec_gap_registry_mutating_source_dict_after_init_changes_nothing() -> 
     cls_registry = SpecGapRegistry(dict_known_gaps)  # type: ignore[arg-type]
     dict_known_gaps["old"] = "CNPJ_FUNDO"
     assert cls_registry.is_known_gap(str_regime_name="old", str_column="CNPJ") is False
+
+
+def test_spec_gap_registry_mutating_source_dict_after_init_keeps_original_gap() -> None:
+    """The copy still holds the gap registered at construction after the source changes.
+
+    Returns
+    -------
+    None
+    """
+    dict_known_gaps: dict[str, object] = {"old": frozenset({"OTHER"})}
+    cls_registry = SpecGapRegistry(dict_known_gaps)  # type: ignore[arg-type]
+    dict_known_gaps["old"] = "CNPJ_FUNDO"
+    assert cls_registry.is_known_gap(str_regime_name="old", str_column="OTHER") is True
+
+
+def test_spec_gap_registry_accepts_non_dict_mapping() -> None:
+    """Any ``Mapping`` is accepted, not only ``dict``.
+
+    Returns
+    -------
+    None
+    """
+    cls_registry = SpecGapRegistry(MappingProxyType({"old": frozenset({"CNPJ"})}))
+    assert cls_registry.is_known_gap(str_regime_name="old", str_column="CNPJ") is True
 
 
 def test_spec_gap_registry_known_gaps_view_is_read_only() -> None:

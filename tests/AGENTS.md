@@ -380,13 +380,12 @@ floor remained.
 
 ## Examples in this folder
 
-- `unit/test_report_renderer.py` — the canonical sample: real-file tests via `tmp_path`,
-  a round-trip assertion, and one boundary-mocked test via `mocker`.
-- `unit/conftest.py` — the `df_sample` fixture shared across the unit suite.
-- `unit/test_family_convention_example.py` — the **introspective-convention** pattern: a rule
-  every member of a family must follow gets a test that *discovers* the family from `__all__`
-  and asserts the convention on each member, instead of a doc paragraph and a hand-listed set.
-  Copy it; delete it if this project has no such family.
+- `unit/test_regime_adapters.py`, `unit/test_spec_gap_registry.py` — the library's own
+  units: one assertion per test, should-fail cases through `pytest.raises` with a `match=`
+  this package raises.
+- `unit/test_docs_examples.py` — runs every `python` block in `README.md`, `docs/usage.md`
+  and `docs/examples.md`, so a documented example cannot rot.
+- `conftest.py` (at `tests/`) — the autouse network guard described above.
 
 ## Testing the layers
 

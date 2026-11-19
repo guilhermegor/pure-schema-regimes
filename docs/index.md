@@ -1,6 +1,10 @@
 # **pure-schema-regimes** <img src="assets/logo.png" align="right" width="200" style="border-radius: 15px;" alt="pure-schema-regimes">
 
-A minimal Python library with packaging, tests, CI, and linting pre-configured.
+Per-regime schema adapters for series that change columns mid-series. Declare each regime's
+period coverage with a `RegimeWindow`, resolve a period to its owning regime with a
+`RegimeRegistry`, bind each reader to one regime with a `RegimeBoundAdapter` (it refuses
+another regime's period), and suppress only named, expected spec gaps with a
+`SpecGapRegistry`. Standard library only, no I/O: your readers stay yours.
 
 ---
 

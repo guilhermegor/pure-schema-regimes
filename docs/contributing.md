@@ -158,16 +158,16 @@ against dependency confusion (`poetry`'s `priority = "explicit"`; `pip --index-u
 
 ## Branding the docs site
 
-The scaffold ships a **placeholder** brand image at `docs/assets/logo.png`, wired as the header
-logo/favicon (`theme.logo` / `theme.favicon` in `mkdocs.yml`) and as the landing hero on
-`docs/index.md`. To brand your site:
+The project's logo is `docs/assets/logo.png`. It is wired as the header logo and favicon
+(`theme.logo` / `theme.favicon` in `mkdocs.yml`), as the landing image on `docs/index.md`, and
+as the README logo. To change it:
 
-1. Replace `docs/assets/logo.png` with your own asset (keep the filename, or update the two
-   `mkdocs.yml` paths and the `<img>` in `docs/index.md`).
+1. Replace `docs/assets/logo.png`, keeping the filename (or update the two `mkdocs.yml` paths,
+   the `<img>` in `docs/index.md` and the README `<img>`).
 2. Tune size, position and border inline on the `<img>` — `width="200"` (scale),
    `align="right"` (position) and `style="border-radius: 15px;"` (rounded) — in `docs/index.md`.
 3. Set the header colour in `docs/stylesheets/brand.css` (`--md-primary-fg-color`, plus the
-   `slate` variant for dark mode) to match your logo.
+   `slate` variant for dark mode) to match the logo.
 
 ## Repository protection & security (one-time, scripted)
 

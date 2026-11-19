@@ -125,25 +125,27 @@ class SpecGapRegistry(metaclass=TypeChecker):
 
     Parameters
     ----------
-    dict_known_gaps : dict of str to frozenset of str
+    dict_known_gaps : Mapping of str to frozenset of str
         Regime name → the column names that regime is KNOWN to lack in the current spec.
-        A regime absent from this dict has no known gaps (every mismatch is reported).
+        Any ``Mapping`` is accepted (a ``dict``, a ``MappingProxyType``, ...). A regime
+        absent from this mapping has no known gaps (every mismatch is reported).
 
     Raises
     ------
     TypeError
-        When a key is not ``str``, a value is not ``frozenset``, or a value holds a
-        non-``str`` element. Every entry is checked here because ``TypeChecker`` skips
-        dunder methods, so nothing else validates the constructor's argument.
+        When the argument is not a ``Mapping``, a key is not ``str``, a value is not
+        ``frozenset``, or a value holds a non-``str`` element. Every entry is checked here
+        because ``TypeChecker`` skips dunder methods, so nothing else validates the
+        constructor's argument.
 
     Notes
     -----
     The constructor copies the mapping first and validates the copy, so a later write to
-    the caller's dict cannot reach the registry. Storage is a private ``dict``, which keeps
+    the caller's mapping cannot reach the registry. Storage is a private ``dict``, which keeps
     the registry picklable; the public ``dict_known_gaps`` is a read-only property.
     """
 
-    def __init__(self, dict_known_gaps: dict[str, frozenset[str]]) -> None:
+    def __init__(self, dict_known_gaps: Mapping[str, frozenset[str]]) -> None:
         _require_mapping(obj_known_gaps=dict_known_gaps)
         dict_copy = dict(dict_known_gaps)
         for obj_regime_name, obj_columns in dict_copy.items():
